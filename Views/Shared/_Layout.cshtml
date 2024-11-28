@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - NWU Taskmaster</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <style>
+        /* Custom styling for navigation bar */
+        .navbar {
+            background-color: #4B0082; /* NWU purple color */
+        }
+
+        .navbar-brand img {
+            height: 50px;
+        }
+
+        .navbar-nav .nav-link {
+            color: white !important;
+            font-size: 16px;
+        }
+
+            .navbar-nav .nav-link:hover {
+                text-decoration: underline;
+            }
+
+        .account-links {
+            color: white;
+            margin-right: 10px;
+        }
+
+            .account-links:hover {
+                text-decoration: underline;
+            }
+    </style>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="navbar navbar-expand-sm navbar-dark">
+        <div class="container">
+            <!-- Logo -->
+            <a class="navbar-brand" href="/Home">
+                <img src="~/Content/Images/nwu-logo.png" alt="NWU Taskmaster Logo" />
+            </a>
+
+            <!-- Sign In/Out and Account Management -->
+            <div>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <a href="@Url.Action("Index", "Manage")" class="account-links">Account</a>
+
+                    <!-- Logout Form -->
+                    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="account-links" style="background: none; border: none; padding: 0; color: white; cursor: pointer;">
+                            Sign Out
+                        </button>
+                    }
+                }
+                else
+                {
+                    <a href="@Url.Action("Login", "Account")" class="account-links">Sign In</a>
+                    <a href="@Url.Action("Register", "Account")" class="account-links">Register</a>
+                }
+            </div>
+        </div>
+    </nav>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="navbar navbar-expand-sm">
+        <div class="container">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="@Url.Action("Index", "Home")" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="@Url.Action("Index", "Dashboard")" class="nav-link">Dashboard</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+
+    <!-- Main Content Area -->
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer style="background-color: #4B0082; color: white; text-align: center; padding: 10px;">
+            <p>&copy; @DateTime.Now.Year - NWU Taskmaster</p>
+            <a href="#" style="color: white; text-decoration: none;">Help</a> |
+            <a href="#" style="color: white; text-decoration: none;">Contact Us</a>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js">
+    </script>
+</body>
+</html>

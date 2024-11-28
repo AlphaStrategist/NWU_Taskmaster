@@ -1,0 +1,96 @@
+﻿@using NWU_Taskmaster.Models
+@model TaskViewModel
+@{
+    ViewBag.Title = "Task Editor";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header text-center" style="background-color: #4b0082; color: white;">
+                    <h4>@(Model.TaskId == 0 ? "Create Task" : "Edit Task")</h4>
+                </div>
+                <div class="card-body">
+                    @using (Html.BeginForm("SaveTask", "Task", FormMethod.Post, new { role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(m => m.TaskId)
+                        @Html.HiddenFor(m => m.ParentTaskId)
+
+                        <table class="table table-borderless" style="width: 100%;">
+                            <!-- Task Title -->
+                            <tr>
+                                <td style="text-align: left; width: 30%;"><strong>Task Name:</strong></td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.Title, new { @class = "form-control", placeholder = "Enter task name" })
+                                    @Html.ValidationMessageFor(m => m.Title, "", new { @class = "text-danger" })
+                                </td>
+                            </tr>
+
+                            <!-- Task Description -->
+                            <tr>
+                                <td style="text-align: left;"><strong>Description:</strong></td>
+                                <td>
+                                    @Html.TextAreaFor(m => m.Description, new { @class = "form-control", placeholder = "Enter task description", rows = 3 })
+                                    @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
+                                </td>
+                            </tr>
+
+                            <!-- Due Date -->
+                            <tr>
+                                <td style="text-align: left;"><strong>Due Date:</strong></td>
+                                <td>
+                                    <div class="input-group">
+                                        @Html.TextBoxFor(
+                                            m => m.DueDate,
+                                            "{0:yyyy-MM-dd}",
+                                            new { @class = "form-control", type = "date" }
+                                        )
+                                        <span class="input-group-text">Time:</span>
+                                        @Html.TextBox(
+                                            "DueTime",
+                                            "{0:HH:mm}",
+                                            new { @class = "form-control", type = "time", value = Model.DueDate.ToString("HH:mm") }
+                                        )
+                                    </div>
+                                    <small class="text-muted">Select both date and time for the task deadline.</small>
+                                    @Html.ValidationMessageFor(m => m.DueDate, "", new { @class = "text-danger" })
+
+                                </td>
+                            </tr>
+
+                            <!-- Priority -->
+                            <tr>
+                                <td style="text-align: left;"><strong>Priority:</strong></td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.Priority, new { @class = "form-control", type = "number", min = "1", max = "5", placeholder = "Enter priority (1 to 5)" })
+                                    @Html.ValidationMessageFor(m => m.Priority, "", new { @class = "text-danger" })
+                                </td>
+                            </tr>
+
+                            <!-- Category -->
+                            <tr>
+                                <td style="text-align: left;"><strong>Category:</strong></td>
+                                <td>
+                                    @Html.DropDownListFor(m => m.CategoryId, new SelectList(ViewBag.Categories as IEnumerable<SelectListItem>, "Value", "Text"), "Select Category", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.CategoryId, "", new { @class = "text-danger" })
+                                </td>
+                            </tr>
+                        </table>
+
+                        <div class="text-center mt-3">
+                            <button type="submit" class="btn btn-primary btn-block" style="background-color: #4b0082; border: none;">
+                                @(Model.TaskId == 0 ? "Create Task" : "Save Task")
+                            </button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

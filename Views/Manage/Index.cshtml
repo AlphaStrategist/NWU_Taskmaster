@@ -1,0 +1,162 @@
+﻿@using NWU_Taskmaster.Models
+@model IndexViewModel
+@{
+    ViewBag.Title = "Manage Account";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <!-- Block 1: Your Account -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow h-100">
+                <div class="card-header text-center" style="background-color: #4b0082; color: white;">
+                    <h4>Your Account</h4>
+                </div>
+                <div class="card-body">
+                    <table class="table table-borderless">
+                        <tr>
+                            <td><strong>First Name:</strong></td>
+                            <td>@Model.Username</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Last Name:</strong></td>
+                            <td>@Model.Surname</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Email:</strong></td>
+                            <td>@Model.Email</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Total Tasks:</strong></td>
+                            <td>@Model.TotalTasks</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Block 2: Update Your Information -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow h-100">
+                <div class="card-header text-center" style="background-color: #4b0082; color: white;">
+                    <h4>Update Your Information</h4>
+                </div>
+                <div class="card-body">
+                    @using (Html.BeginForm("UpdateUserInfo", "Manage", FormMethod.Post, new { role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <table class="table table-borderless" style="width: 100%;">
+                            <tr>
+                                <td style="text-align: left; width: 30%;"><strong>First Name:</strong></td>
+                                <td>@Html.TextBoxFor(m => m.Username, new { @class = "form-control", placeholder = "Enter your first name" })</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: left;"><strong>Last Name:</strong></td>
+                                <td>@Html.TextBoxFor(m => m.Surname, new { @class = "form-control", placeholder = "Enter your last name" })</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: left;"><strong>Email:</strong></td>
+                                <td>@Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Enter your email" })</td>
+                            </tr>
+                        </table>
+
+                        <div class="text-center mt-3">
+                            <button type="submit" class="btn btn-primary btn-block action-button" style="background-color: #4b0082; border: none;" data-action="Update Your Information">Save Changes</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Block 3: Change Password -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow h-100">
+                <div class="card-header text-center" style="background-color: #4b0082; color: white;">
+                    <h4>Change Password</h4>
+                </div>
+                <div class="card-body">
+                    @using (Html.BeginForm("ChangePassword", "Manage", FormMethod.Post, new { role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <table class="table table-borderless" style="width: 100%;">
+                            <tr>
+                                <td style="text-align: left; width: 30%;"><strong>Current Password</strong></td>
+                                <td><input type="password" name="CurrentPassword" class="form-control" placeholder="Enter Current Password:" /></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: left;"><strong>New Password</strong></td>
+                                <td><input type="password" name="NewPassword" class="form-control" placeholder="Enter New Password:" /></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: left;"><strong>Confirm New Password</strong></td>
+                                <td><input type="password" name="ConfirmPassword" class="form-control" placeholder="Confirm New Password:" /></td>
+                            </tr>
+                        </table>
+
+                        <div class="text-center mt-3">
+                            <button type="submit" class="btn btn-primary btn-block action-button" style="background-color: #4b0082; border: none;" data-action="Change Your Password">Change Password</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Block 4: Actions -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow h-100">
+                <div class="card-header text-center" style="background-color: #4b0082; color: white;">
+                    <h4>Actions</h4>
+                </div>
+                <div class="card-body">
+                    <p><strong>Warning:</strong> These actions are irreversible.</p>
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        @using (Html.BeginForm("ClearAllReminders", "Manage", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-block action-button" style="background-color: #e42020ff; color: white; border: none;" data-action="Delete All Reminders">Delete All Reminders</button>
+                        }
+                    </div>
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        @using (Html.BeginForm("ClearAllTasks", "Manage", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-block action-button" style="background-color: #e42020ff; color: white; border: none;" data-action="Delete All Tasks">Delete All Tasks</button>
+                        }
+                    </div>
+                    <div class="form-group">
+                        @using (Html.BeginForm("DeleteAccount", "Manage", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-block action-button" style="background-color: #e42020ff; color: white; border: none;" data-action="Delete Your Account">Delete Account</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const actionButtons = document.querySelectorAll('.action-button');
+            actionButtons.forEach(button => {
+                button.addEventListener('click', function (event) {
+                    
+                    event.preventDefault();
+
+                    const action = this.getAttribute('data-action');
+
+                    const userConfirmed = confirm(`Are you sure you want to ${action}? This action cannot be undone.`);
+
+                    if (userConfirmed) {
+                        this.closest('form').submit();
+                    }
+                });
+            });
+        });</script>
+}
