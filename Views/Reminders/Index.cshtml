@@ -1,0 +1,110 @@
+﻿@using NWU_Taskmaster.Models
+@model ReminderViewModel
+@{
+    ViewBag.Title = "Reminder Editor";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header text-center" style="background-color: #4b0082; color: white;">
+                    <h4>@(Model.ReminderId == 0 ? "Create Reminder" : "Edit Reminder")</h4>
+                </div>
+                <div class="card-body">
+                    @using (Html.BeginForm("SaveReminder", "Reminders", FormMethod.Post, new { role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(m => m.ReminderId)
+
+                    <table class="table table-borderless" style="width: 100%;">
+                        <!-- Task Selection -->
+                        <tr>
+                            <td style="text-align: left; width: 30%;"><strong>Task:</strong></td>
+                            <td>
+                                @if (ViewBag.Tasks != null && (ViewBag.Tasks as List<SelectListItem>).Any())
+                                {
+                                    @Html.DropDownListFor(m => m.TaskId, ViewBag.Tasks as IEnumerable<SelectListItem>, "Select a Task", new { @class = "form-control" })
+                                }
+                                else
+                                {
+                                    <p>No tasks available. Please create a task before adding a reminder.</p>
+                                }
+                                @Html.ValidationMessageFor(m => m.TaskId, "", new { @class = "text-danger" })
+                            </td>
+                        </tr>
+
+                        <!-- Reminder Date -->
+                        <tr>
+                            <td style="text-align: left;"><strong>Reminder Date:</strong></td>
+                            <td>
+                                <div class="input-group">
+                                    @Html.TextBoxFor(
+                                        m => m.ReminderDate,
+                                        "{0:yyyy-MM-dd}",
+                                        new { @class = "form-control", type = "date", value = Model.ReminderDate.ToString("yyyy-MM-dd") }
+                                    )
+                                    <span class="input-group-text">Time:</span>
+                                    @Html.TextBox(
+                                        "ReminderTime",
+                                        "{0:HH:mm}",
+                                        new { @class = "form-control", type = "time", value = Model.ReminderDate.ToString("HH:mm") }
+                                    )
+                                </div>
+                                <small class="text-muted">Select both date and time for the reminder.</small>
+                                @Html.ValidationMessageFor(m => m.ReminderDate, "", new { @class = "text-danger" })
+                            </td>
+                        </tr>
+
+                        <!-- Recurring -->
+                        <tr>
+                            <td style="text-align: left;"><strong>Recurring:</strong></td>
+                            <td>
+                                @Html.CheckBoxFor(m => m.IsRecurring, new { @class = "form-check-input" })
+                                <label class="form-check-label">Enable recurring reminder</label>
+                            </td>
+                        </tr>
+
+                        <!-- Recurring Interval -->
+                        <tr>
+                            <td style="text-align: left;"><strong>Interval:</strong></td>
+                            <td>
+                                @Html.TextBoxFor(m => m.RecurringInterval, new { @class = "form-control", placeholder = "e.g., daily, weekly" })
+                                @Html.ValidationMessageFor(m => m.RecurringInterval, "", new { @class = "text-danger" })
+                            </td>
+                        </tr>
+
+                        <!-- Relative to Due Date -->
+                        <tr>
+                            <td style="text-align: left;"><strong>Relative to Due Date:</strong></td>
+                            <td>
+                                @Html.CheckBoxFor(m => m.RelativeToDueDate, new { @class = "form-check-input" })
+                                <label class="form-check-label">Set reminder relative to task due date</label>
+                            </td>
+                        </tr>
+
+                        <!-- Relative Time -->
+                        <tr>
+                            <td style="text-align: left;"><strong>Relative Time:</strong></td>
+                            <td>
+                                @Html.TextBoxFor(m => m.RelativeTime, new { @class = "form-control", placeholder = "e.g., -2d, +3h" })
+                                @Html.ValidationMessageFor(m => m.RelativeTime, "", new { @class = "text-danger" })
+                            </td>
+                        </tr>
+                    </table>
+
+                        <div class="text-center mt-3">
+                            <button type="submit" class="btn btn-primary btn-block" style="background-color: #4b0082; border: none;">
+                                @(Model.ReminderId == 0 ? "Create Reminder" : "Save Reminder")
+                            </button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

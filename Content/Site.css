@@ -194,3 +194,13 @@ textarea {
     width: 100%;
     text-align: left;
 }
+
+.dropdown-menu {
+    max-height: 300px;
+    overflow-y: auto; /* Scroll if too many reminders */
+}
+
+.badge {
+    font-size: 0.8rem;
+    margin-left: 5px;
+}

@@ -19,5 +19,6 @@ namespace NWU_Taskmaster.Models
         public bool relative_to_due_date { get; set; } = false;
         public string relative_time { get; set; }
         public DateTime? created_at { get; set; } = DateTime.Now;
+        public bool is_triggered { get; set; } = false;
     }
 }

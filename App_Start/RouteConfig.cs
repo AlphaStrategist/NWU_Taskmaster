@@ -18,6 +18,13 @@ namespace NWU_Taskmaster
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+
+            routes.MapRoute(
+            name: "Dashboard",
+            url: "Dashboard/{action}/{id}",
+            defaults: new { controller = "Dashboard", action = "Index", id = UrlParameter.Optional }
+            );
+
         }
     }
 }

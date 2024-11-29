@@ -1,4 +1,43 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNet.Identity
+@{
+    if (User.Identity.IsAuthenticated)
+    {
+        using (var db = new NWU_Taskmaster.Models.ApplicationDbContext())
+        {
+            // Fetch user information
+            var userId = User.Identity.GetUserId();
+            var clientId = db.Clients
+                .Where(c => c.aspnet_user_id == userId)
+                .Select(c => c.client_id)
+                .FirstOrDefault();
+
+            if (clientId != 0)
+            {
+                var now = DateTime.Now;
+                var upperLimit = now.AddMinutes(5);
+                
+                // Fetch reminders for tasks belonging to this user
+                var reminders = (from reminder in db.Reminders
+                                 join task in db.ClientTasks
+                                 on reminder.task_id equals task.task_id
+                                 where task.client_id == clientId
+                                 && reminder.reminder_date >= now
+                                 && reminder.reminder_date <= upperLimit
+                                 orderby reminder.reminder_date
+                                 select new
+                                 {
+                                     TaskTitle = task.title,
+                                     ReminderDate = reminder.reminder_date,
+                                     ReminderId = reminder.reminder_id
+                                 }).ToList();
+
+                ViewBag.Reminders = reminders;
+            }
+        }
+    }
+}
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -77,16 +116,45 @@
                 <li class="nav-item">
                     <a href="@Url.Action("Index", "Home")" class="nav-link">Home</a>
                 </li>
-                @if(User.Identity.IsAuthenticated)
+                @if (User.Identity.IsAuthenticated)
                 {
                     <li class="nav-item">
                         <a href="@Url.Action("Index", "Dashboard")" class="nav-link">Dashboard</a>
                     </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index", "Reminders")" class="nav-link">Reminders</a>
+                    </li>
                 }
             </ul>
+
+            <!-- Dropdown for reminders -->
+            @if (ViewBag.Reminders != null && ViewBag.Reminders.Count > 0)
+            {
+                <div class="dropdown ms-auto">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="reminderDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Reminders
+                        <span class="badge bg-danger">@ViewBag.Reminders.Count</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="reminderDropdown">
+                        <li><h6 class="dropdown-header">Upcoming Reminders</h6></li>
+                        @foreach (var reminder in ViewBag.Reminders)
+                        {
+                            <li>
+                                <form action="@Url.Action("ClearReminder", "Reminders")" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="reminderId" value="@reminder.ReminderId" />
+                                    <button type="submit" class="dropdown-item">
+                                        <strong>@reminder.TaskTitle</strong> - @reminder.ReminderDate.ToString("dd/MM HH:mm")
+                                    </button>
+                                </form>
+                            </li>
+                        }
+                    </ul>
+
+                </div>
+            }
         </div>
     </nav>
-
 
     <!-- Main Content Area -->
     <div class="container body-content">

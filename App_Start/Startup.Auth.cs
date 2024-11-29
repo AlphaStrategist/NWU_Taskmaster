@@ -6,6 +6,7 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
 using NWU_Taskmaster.Models;
+using Microsoft.Owin.Host.SystemWeb;
 
 namespace NWU_Taskmaster
 {
@@ -26,6 +27,7 @@ namespace NWU_Taskmaster
             {
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
                 LoginPath = new PathString("/Account/Login"),
+                SlidingExpiration = true,
                 Provider = new CookieAuthenticationProvider
                 {
                     // Enables the application to validate the security stamp when the user logs in.
@@ -33,7 +35,10 @@ namespace NWU_Taskmaster
                     OnValidateIdentity = SecurityStampValidator.OnValidateIdentity<ApplicationUserManager, ApplicationUser>(
                         validateInterval: TimeSpan.FromMinutes(30),
                         regenerateIdentity: (manager, user) => user.GenerateUserIdentityAsync(manager))
-                }
+                },
+                CookieSecure = CookieSecureOption.SameAsRequest,
+                CookieHttpOnly = true,
+                CookieManager = new SystemWebCookieManager()
             });            
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
 

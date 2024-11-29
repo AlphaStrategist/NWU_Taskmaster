@@ -31,11 +31,4 @@ namespace NWU_Taskmaster.Models
         [Display(Name = "Category")]
         public int? CategoryId { get; set; }
     }
-
-    public enum PriorityLevel
-    {
-        Low = 1,
-        Medium = 2,
-        High = 3
-    }
 }
