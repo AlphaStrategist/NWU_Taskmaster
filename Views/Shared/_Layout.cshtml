@@ -43,7 +43,7 @@
         <div class="container">
             <!-- Logo -->
             <a class="navbar-brand" href="/Home">
-                <img src="~/Content/Images/nwu-logo.png" alt="NWU Taskmaster Logo" />
+                <img src="https://nwuimages.blob.core.windows.net/images/nwu-logo.png" alt="NWU Taskmaster Logo" />
             </a>
 
             <!-- Sign In/Out and Account Management -->
@@ -77,9 +77,12 @@
                 <li class="nav-item">
                     <a href="@Url.Action("Index", "Home")" class="nav-link">Home</a>
                 </li>
-                <li class="nav-item">
-                    <a href="@Url.Action("Index", "Dashboard")" class="nav-link">Dashboard</a>
-                </li>
+                @if(User.Identity.IsAuthenticated)
+                {
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index", "Dashboard")" class="nav-link">Dashboard</a>
+                    </li>
+                }
             </ul>
         </div>
     </nav>
@@ -91,8 +94,6 @@
         <hr />
         <footer style="background-color: #4B0082; color: white; text-align: center; padding: 10px;">
             <p>&copy; @DateTime.Now.Year - NWU Taskmaster</p>
-            <a href="#" style="color: white; text-decoration: none;">Help</a> |
-            <a href="#" style="color: white; text-decoration: none;">Contact Us</a>
         </footer>
     </div>
 
