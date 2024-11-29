@@ -15,9 +15,9 @@ namespace NWU_Taskmaster.Controllers
         {
             var model = new TaskViewModel
             {
-                ParentTaskId = parentTaskId ?? 0, // Parent ID for subtasks, 0 if it's a new parent task
-                TaskId = 0, // Default for new tasks
-                DueDate = DateTime.Now // Default due date
+                ParentTaskId = parentTaskId ?? 0,
+                TaskId = 0, 
+                DueDate = DateTime.Now 
             };
 
             ViewBag.Categories = GetCategoriesForDropdown();

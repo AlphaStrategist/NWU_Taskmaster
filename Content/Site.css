@@ -32,7 +32,7 @@ textarea {
 
 .navbar-brand img {
     max-height: 50px;
-    width: auto; /* Keeps the logo responsive */
+    width: auto;
 }
 
 .nav-link:hover {
@@ -93,7 +93,7 @@ textarea {
 }
 
     .circle.filled {
-        background-color: #4B0082; /* NWU Purple */
+        background-color: #4B0082;
     }
 
 .tasks-container {
@@ -137,7 +137,7 @@ textarea {
 }
 
 .task-body {
-    margin-top: 40px; /* Ensure it doesn't overlap the header */
+    margin-top: 40px;
     text-align: center;
 }
 
@@ -170,7 +170,7 @@ textarea {
 }
 
     .circle.filled {
-        background-color: #4b0082; /* Purple color */
+        background-color: #4b0082;
     }
 
 .add-task {
@@ -197,7 +197,7 @@ textarea {
 
 .dropdown-menu {
     max-height: 300px;
-    overflow-y: auto; /* Scroll if too many reminders */
+    overflow-y: auto; 
 }
 
 .badge {

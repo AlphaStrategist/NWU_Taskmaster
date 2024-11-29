@@ -5,11 +5,10 @@ namespace NWU_Taskmaster.Models
 {
     public class TaskViewModel
     {
-        public int TaskId { get; set; } // For editing existing tasks
+        public int TaskId { get; set; } 
 
         [Display(Name = "Parent Task")]
-        public int ParentTaskId { get; set; } // For linking subtasks to parent
-
+        public int ParentTaskId { get; set; }
         [Required]
         [StringLength(100)]
         [Display(Name = "Task Title")]

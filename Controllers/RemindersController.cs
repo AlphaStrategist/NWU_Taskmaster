@@ -33,7 +33,7 @@ namespace NWU_Taskmaster.Controllers
 
             if (!taskId.HasValue)
             {
-                taskId = tasks.FirstOrDefault()?.task_id; // Default to the first task if none is selected
+                taskId = tasks.FirstOrDefault()?.task_id;
             }
 
             var model = new ReminderViewModel
@@ -60,7 +60,7 @@ namespace NWU_Taskmaster.Controllers
             if (clientId == null)
             {
                 TempData["Error"] = "Unable to identify the client.";
-                return RedirectToAction("Index", "Dashboard"); // Redirect if client is not found
+                return RedirectToAction("Index", "Dashboard"); 
             }
 
             // Populate the task dropdown
@@ -74,8 +74,8 @@ namespace NWU_Taskmaster.Controllers
 
             var model = new ReminderViewModel
             {
-                TaskId = 0, // Default to no pre-selected task
-                ReminderDate = DateTime.Now // Initialize to current date and time
+                TaskId = 0, 
+                ReminderDate = DateTime.Now 
             };
 
             return View("Index", model);
@@ -99,13 +99,13 @@ namespace NWU_Taskmaster.Controllers
                         Text = t.title
                     }).ToList();
 
-                return View("Create", model); // Use "Create" view for errors
+                return View("Create", model);
             }
 
             // Combine the date and time inputs
             if (DateTime.TryParse($"{model.ReminderDate:yyyy-MM-dd} {ReminderTime}", out DateTime fullReminderDate))
             {
-                model.ReminderDate = fullReminderDate; // Ensure this has both date and time
+                model.ReminderDate = fullReminderDate;
             }
             else
             {

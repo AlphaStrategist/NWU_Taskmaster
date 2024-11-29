@@ -368,7 +368,7 @@ namespace NWU_Taskmaster.Controllers
                 client.usersurname = model.Surname;
                 client.email = model.Email;
 
-                db.SaveChanges(); // Persist changes to the database
+                db.SaveChanges();
             }
 
             TempData["SuccessMessage"] = "Your information has been updated successfully.";
